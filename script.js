@@ -23,7 +23,7 @@ const projectsData = {
         heroColor: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         heroImage: 'smart.jpg',
         videoEmbed: 'https://drive.google.com/file/d/1n0_9NNtVEIkj_35PG3r_D1SCKIDn8Gz8/preview',
-        caseStudyEmbed: 'https://drive.google.com/file/d/1aAESKA-_RKuoi84VbYYLTveXoTGxpNul/preview'
+        caseStudyEmbed: 'https://www.figma.com/proto/nOWVeJIwIkZxu95sFbAVcg/Smart-Analysis?node-id=188-21&t=5vwn3qgVNJf9gY22-1&scaling=scale-down-width&content-scaling=fixed&page-id=13%3A12'
     },
     'cricter': {
         title: 'Cricter',
@@ -35,13 +35,17 @@ const projectsData = {
         title: 'Navi Mumbai Airport',
         description: 'The Navi Mumbai International Airport wayfinding project is a comprehensive signage and navigation system designed to guide millions of passengers through the terminal. Working with a multidisciplinary team, I developed intuitive visual systems that transcend language barriers, ensuring smooth passenger flow and reducing anxiety in an often stressful environment. The design prioritizes accessibility, clarity, and the regional cultural identity.',
         heroColor: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-        heroImage: 'navi.jpg'
+        heroImage: 'navi.jpg',
+        caseStudyEmbed: 'https://www.figma.com/proto/qCdYV3xTJmBDqE6iM8t0s0/Navi-Mumbai-Case-Study?node-id=76-2&t=9q9MqF2ZU8hljHSr-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1',
+        hideVideoBtn: true
     },
-    'release-hound': {
-        title: 'Release Monitor',
-        description: 'Release Monitor is a SaaS product designed for agile development teams to streamline their release management process. The platform provides visibility into deployment pipelines, tracks release notes, and coordinates cross-team dependencies. Through research with product managers and developers, I designed an interface that balances powerful functionality with ease of use, reducing release-related stress and miscommunication.',
-        heroColor: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-        heroImage: 'release.jpg'
+    'chatbot': {
+        title: 'Chatbot',
+        description: 'Chatbot is a conversational assistant experience designed to help users get answers quickly with clear, guided flows. The work focused on message hierarchy, response clarity, and edge-case handling (handoff, errors, and intent mismatch), resulting in an interface that feels fast, helpful, and trustworthy.',
+        heroColor: 'linear-gradient(135deg, #a855f7 0%, #22d3ee 100%)',
+        heroImage: 'chatbot.jpg',
+        caseStudyEmbed: 'https://www.figma.com/proto/aSKfrVEm8NCnuUFps3HH4u/Gru-Chatbot?node-id=3-405&t=sQ9SfE1NrdD9dSdY-1&scaling=min-zoom&content-scaling=fixed&page-id=3%3A401',
+        hideVideoBtn: true
     }
 };
 
@@ -245,17 +249,22 @@ function initProjectModal() {
     // Track current project data
     let currentProject = null;
     
-    // Open modal
+    // Open modal - handle button clicks
     cards.forEach(card => {
-        card.addEventListener('click', () => {
-            const projectId = card.dataset.project;
-            const projectData = projectsData[projectId];
-            
-            if (projectData) {
-                currentProject = projectData;
-                openModal(projectData);
-            }
-        });
+        const viewBtn = card.querySelector('.view-project-btn');
+        
+        if (viewBtn && !card.classList.contains('project-disabled')) {
+            viewBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const projectId = card.dataset.project;
+                const projectData = projectsData[projectId];
+                
+                if (projectData) {
+                    currentProject = projectData;
+                    openModal(projectData);
+                }
+            });
+        }
     });
     
     // Close modal
@@ -288,6 +297,9 @@ function initProjectModal() {
         }
         title.textContent = data.title;
         description.textContent = data.description;
+
+        // Toggle action button visibility per project
+        videoBtn.style.display = data.hideVideoBtn ? 'none' : '';
         
         // Update button states based on available content
         if (data.videoEmbed) {
@@ -311,6 +323,7 @@ function initProjectModal() {
     
     function closeModal() {
         modal.classList.remove('active');
+        modal.classList.remove('embed-active');
         document.body.style.overflow = '';
         currentProject = null;
         
@@ -323,6 +336,9 @@ function initProjectModal() {
     }
     
     function switchView(view) {
+        const isEmbedView = view === 'video' || view === 'casestudy';
+        modal.classList.toggle('embed-active', isEmbedView);
+
         // Hide all views
         infoView.classList.remove('active');
         videoView.classList.remove('active');
@@ -362,6 +378,12 @@ function initProjectModal() {
     
     caseStudyBtn.addEventListener('click', () => {
         if (currentProject && currentProject.caseStudyEmbed) {
+            // For external prototypes (e.g., Figma, Canva), open in a new tab instead of embedding
+            if (currentProject.caseStudyEmbed.includes('figma.com/') || currentProject.caseStudyEmbed.includes('canva.com/')) {
+                const newTab = window.open(currentProject.caseStudyEmbed, '_blank', 'noopener,noreferrer');
+                if (newTab) newTab.opener = null;
+                return;
+            }
             switchView('casestudy');
         }
     });
