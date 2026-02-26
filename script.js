@@ -14,7 +14,7 @@ const PROJECT_CASE_STUDIES = {
     "https://www.figma.com/proto/aSKfrVEm8NCnuUFps3HH4u/Gru-Chatbot?node-id=3-405&t=sQ9SfE1NrdD9dSdY-1&scaling=min-zoom&content-scaling=fixed&page-id=3%3A401",
   "navi-mumbai":
     "https://www.figma.com/proto/qCdYV3xTJmBDqE6iM8t0s0/Navi-Mumbai-Case-Study?node-id=76-2&t=M8mRYPnRtbOG5f6G-1&scaling=scale-down-width&content-scaling=fixed&page-id=0%3A1",
-  cricter: "",
+  cricter: "https://www.figma.com/proto/ccPVCzC2U79iAdHHMJAWPB/Cricter-App-Design?node-id=652-1346&t=bg6VZJlTifvQKywA-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=316%3A228",
 };
 
 function setAriaExpanded(el, value) {
