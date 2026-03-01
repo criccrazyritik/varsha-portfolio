@@ -76,6 +76,21 @@ window.addEventListener("load", () => {
   window.addEventListener("scroll", update, { passive: true });
 })();
 
+// Journey card collapse/expand (per card); whole card is clickable
+(() => {
+  const cards = qsa(".journey-card");
+  cards.forEach((card) => {
+    const btn = card.querySelector(".journey-card-toggle");
+    if (!btn) return;
+    const toggle = () => {
+      const isCollapsed = card.classList.toggle("journey-card--collapsed");
+      setAriaExpanded(btn, !isCollapsed);
+      btn.setAttribute("title", isCollapsed ? "Expand" : "Collapse");
+    };
+    card.addEventListener("click", () => toggle());
+  });
+})();
+
 // Custom cursor (subtle; safe-guarded for touch devices)
 (() => {
   const cursor = qs(".cursor");
